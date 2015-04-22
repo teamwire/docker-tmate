@@ -1,5 +1,5 @@
-FROM phusion/baseimage:0.9.13
-MANTAINER Nicolas Pace <nicolas.pace@unixono.com.ar>
+FROM phusion/baseimage:0.9.16
+MAINTAINER Yann Hodique <hodiquey@vmware.com>
 
 # Set correct environment variables.
 ENV HOME /root
