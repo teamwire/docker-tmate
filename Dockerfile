@@ -1,31 +1,48 @@
-FROM phusion/baseimage:0.9.16
+FROM alpine:edge
 MAINTAINER Yann Hodique <hodiquey@vmware.com>
 
-# Set correct environment variables.
-ENV HOME /root
+RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
+    apk update && \
+    apk upgrade && \
+    apk add --no-cache \
+        libc6-compat \
+        libssh \
+        msgpack-c \
+        ncurses-libs \
+        libevent
 
-# Regenerate SSH host keys. baseimage-docker does not contain any, so you
-# have to do that yourself. You may also comment out this instruction; the
-# init system will auto-generate one during boot.
-RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
+ADD backtrace.patch /backtrace.patch
+ADD message.sh /tmp/message.sh
+ADD tmate-slave.sh /tmate-slave.sh
 
-# Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
-
-RUN apt-get update && \
-    apt-get -y install git-core build-essential pkg-config libtool libevent-dev libncurses-dev zlib1g-dev automake libssh-dev cmake ruby && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN git clone https://github.com/nviennot/tmate-slave.git
-
-RUN cd tmate-slave && \
+RUN apk add --no-cache --virtual build-dependencies \
+        build-base \
+        ca-certificates \
+        bash \
+        wget \
+        git \
+        openssh \
+        libc6-compat \
+        automake \
+        autoconf \
+        zlib-dev \
+        libevent-dev \
+        msgpack-c-dev \
+        ncurses-dev \
+        libexecinfo-dev \
+        libssh-dev && \
+    mkdir /src && \
+    git clone https://github.com/tmate-io/tmate-slave.git /src/tmate-server && \
+    cd /src/tmate-server && \
+    git apply /backtrace.patch && \
     ./create_keys.sh && \
+    mv keys /etc/tmate-keys && \
     ./autogen.sh && \
-    ./configure && \
-     make
+    ./configure CFLAGS="-D_GNU_SOURCE" && \
+    make -j && \
+    cp tmate-slave /bin/tmate-slave && \
+    /bin/sh /tmp/message.sh && \
+    apk del build-dependencies && \
+    rm -rf /src
 
-RUN mkdir /etc/service/tmate-slave
-ADD tmate-slave.sh /etc/service/tmate-slave/run
-
-RUN mkdir -p /etc/my_init.d
-ADD message.sh /etc/my_init.d/message.sh
+ENTRYPOINT ["/tmate-slave.sh"]

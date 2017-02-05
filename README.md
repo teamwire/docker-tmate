@@ -10,17 +10,12 @@ If you want to build it:
 docker build -t tmate-docker .
 ```
 
-If you want to use it, and you built it:
+If you want to use it, and you build it:
 ```
 sudo docker run --privileged -p 2222 -t tmate-docker
 ```
 
-Or, if you just want to use it (without downloading and building it online) just do:
-```
-sudo docker run --privileged -p 2222 -t nicopace/tmate-docker
-```
-
-To know which port was tmate binded, run:
+To know which port was tmate bound to, run:
 ```
 docker ps # this will show you the container id
 docker port <container id> 2222
@@ -35,5 +30,5 @@ container name is used.
 
 For example:
 ```
-docker run --privileged -e HOST=example.com -e PORT=443 -p 443:443 -t nicopace/tmate-docker
+docker run --privileged -e HOST=example.com -e PORT=443 -p 443:443 -t tmate-docker
 ```
