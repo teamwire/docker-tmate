@@ -1,5 +1,5 @@
 FROM alpine:3.8
-MAINTAINER Yann Hodique <hodiquey@vmware.com>
+LABEL maintainer="joachim@teamwire.eu"
 
 RUN apk update && \
     apk upgrade && \
