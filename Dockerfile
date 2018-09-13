@@ -12,7 +12,7 @@ RUN apk update && \
 
 ADD backtrace.patch /backtrace.patch
 ADD message.sh /tmp/message.sh
-ADD tmate-slave.sh /tmate-slave.sh
+ADD tmate-server.sh /tmate-server.sh
 
 RUN apk add --no-cache --virtual build-dependencies \
         build-base \
@@ -44,4 +44,4 @@ RUN apk add --no-cache --virtual build-dependencies \
     apk del build-dependencies && \
     rm -rf /src
 
-ENTRYPOINT ["/tmate-slave.sh"]
+ENTRYPOINT ["/tmate-server.sh"]
