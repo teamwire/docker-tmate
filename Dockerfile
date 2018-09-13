@@ -31,7 +31,7 @@ RUN apk add --no-cache --virtual build-dependencies \
         libexecinfo-dev \
         libssh-dev && \
     mkdir /src && \
-    git clone https://github.com/tmate-io/tmate-slave.git /src/tmate-server && \
+    git clone --depth=1 https://github.com/tmate-io/tmate-slave.git /src/tmate-server && \
     cd /src/tmate-server && \
     git apply /backtrace.patch && \
     ./create_keys.sh && \
