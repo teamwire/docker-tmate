@@ -10,9 +10,12 @@ If you want to build it:
 docker build -t tmate-docker .
 ```
 
+This container will generate host keys during startup.
+If you need persistent host keys, map a host directory into the container
+
 If you want to use it, and you build it:
 ```
-sudo docker run --privileged -p 2222 -t tmate-docker
+sudo docker run --privileged -p 2222 -v /path/to/key/directory:/etc/tmate-keys -t teamwire/tmate
 ```
 
 To know which port was tmate bound to, run:
@@ -30,5 +33,5 @@ container name is used.
 
 For example:
 ```
-docker run --privileged -e HOST=example.com -e PORT=443 -p 443:443 -t tmate-docker
+docker run --privileged -e HOST=example.com -e PORT=443 -p 443:443 -v /path/to/key/directory:/etc/tmate-keys -t teamwire/tmate
 ```
