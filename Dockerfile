@@ -1,8 +1,7 @@
-FROM alpine:edge
+FROM alpine:3.8
 MAINTAINER Yann Hodique <hodiquey@vmware.com>
 
-RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
-    apk update && \
+RUN apk update && \
     apk upgrade && \
     apk add --no-cache \
         libc6-compat \
