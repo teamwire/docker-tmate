@@ -7,15 +7,15 @@ Run it as a priviledged image, as tmate requires some special capabilitites: CLO
 
 If you want to build it:
 ```
-docker build -t tmate-docker .
+docker build -t teamwire/tmate .
 ```
 
 This container will generate host keys during startup.
-If you need persistent host keys, map a host directory into the container
+If you need persistent host keys, map a host directory into the container.
 
 If you want to use it, and you build it:
 ```
-sudo docker run --privileged -p 2222 -v /path/to/key/directory:/etc/tmate-keys -t teamwire/tmate
+docker run --privileged -p 2222 -v /path/to/key/directory:/etc/tmate-keys -t teamwire/tmate
 ```
 
 To know which port was tmate bound to, run:
